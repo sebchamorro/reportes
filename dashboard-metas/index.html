@@ -335,11 +335,11 @@ html,body{
 const DATA = [
   {id:"1.1", trazadora:"Ctrl. desarrollo psicomotor 8 meses", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:83.51},
   {id:"1.2", trazadora:"Ctrl. desarrollo psicomotor 3 años", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:87.97},
-  {id:"12", trazadora:"Ctrl. salud infantil <1 año", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:100.70},
+  {id:"12", trazadora:"Ctrl. salud infantil <1 año", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:88.47},
   {id:"21", trazadora:"Ctrl. salud infantil 6–9 años", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:49.58},
-  {id:"16", trazadora:"Consulta lactancia materna", grupo_etario:"Infancia", estamento:"Matronería", cumplimiento:116.60},
-  {id:"13", trazadora:"Crónicos respiratorios — IRA", grupo_etario:"Infancia", estamento:"Eq. Cardiovascular", cumplimiento:120.23},
-  {id:"14", trazadora:"Nutricional — malnutrición exceso", grupo_etario:"Infancia", estamento:"Nutrición", cumplimiento:19.51},
+  {id:"16", trazadora:"Consulta lactancia materna", grupo_etario:"Infancia", estamento:"Matronería", cumplimiento:89.42},
+  {id:"13", trazadora:"Crónicos respiratorios — IRA", grupo_etario:"Infancia", estamento:"Eq. Cardiovascular", cumplimiento:132.42},
+  {id:"14", trazadora:"Nutricional — malnutrición exceso", grupo_etario:"Infancia", estamento:"Nutrición", cumplimiento:29.90},
   {id:"19", trazadora:"Nutricional 5° mes de vida", grupo_etario:"Infancia", estamento:"Nutrición", cumplimiento:116.22},
 
   {id:"2", trazadora:"Educación grupal adolescentes", grupo_etario:"Adolescencia", estamento:"Eq. Multidisciplinario", cumplimiento:24.29},
@@ -387,7 +387,7 @@ function semaforo(p){
   if(p < 90 || p >= 110) return "alerta";
   return "meta";
 }
-function pct(n){ return n.toFixed(1).replace(".",",") + "%"; }
+function pct(n){ return n.toFixed(2).replace(".",",") + "%"; }
 DATA.forEach(d => d.semaforo = semaforo(d.cumplimiento));
 
 /* KPIs */
