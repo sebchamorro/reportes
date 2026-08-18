@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trazadoras DESAM Constitución — ene–ago 2026</title>
+<style>
+
+:root{
+  --paper:      #FBF9F5;
+  --panel:      #FFFFFF;
+  --ink:        #262320;
+  --ink-soft:   #6B655A;
+  --rule:       #E2DACB;
+
+  --critico:    #A8583D;
+  --critico-bg: #F1E3DC;
+  --alerta:     #B9903B;
+  --alerta-bg:  #F3E9D2;
+  --meta:       #4F7A5B;
+  --meta-bg:    #E1EBE1;
+
+  --sans: "Segoe UI","Segoe UI Web",-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono: "IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+}
+
+*{box-sizing:border-box;}
+html,body{
+  height:100%;
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  overflow:hidden;
+}
+
+.app{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  padding:.7rem .9rem .8rem;
+  gap:.6rem;
+}
+
+/* ---------- topbar ---------- */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  flex-shrink:0;
+}
+.topbar h1{
+  font-size:1.15rem;
+  font-weight:700;
+  margin:0;
+  letter-spacing:-.01em;
+}
+.topbar .sub{
+  font-size:.74rem;
+  color:var(--ink-soft);
+}
+.topbar .meta{
+  font-family:var(--mono);
+  font-size:.68rem;
+  color:var(--ink-soft);
+  text-align:right;
+  line-height:1.5;
+}
+
+/* ---------- KPI row ---------- */
+.kpi-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:.6rem;
+  flex-shrink:0;
+  height:88px;
+}
+.kpi{
+  border-radius:8px;
+  padding:.7rem .9rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  color:#fff;
+}
+.kpi .n{
+  font-size:1.9rem;
+  font-weight:700;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.kpi .lbl{
+  font-size:.72rem;
+  opacity:.92;
+  margin-top:.3rem;
+  line-height:1.25;
+}
+.kpi.ink{background:#2E2A26;}
+.kpi.critico{background:var(--critico);}
+.kpi.alerta{background:var(--alerta);}
+.kpi.meta{background:var(--meta);}
+
+/* ---------- legend strip ---------- */
+.legend{
+  display:flex;
+  gap:1.4rem;
+  align-items:center;
+  font-size:.72rem;
+  color:var(--ink-soft);
+  flex-shrink:0;
+}
+.legend b{color:var(--ink);}
+.legend span{display:inline-flex;align-items:center;gap:.4rem;}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.dot.critico{background:var(--critico);}
+.dot.alerta{background:var(--alerta);}
+.dot.meta{background:var(--meta);}
+.legend .spacer{flex:1;}
+.legend .hint{font-family:var(--mono);font-size:.66rem;}
+
+/* ---------- main grid: heatmap ---------- */
+.board{
+  flex:1;
+  min-height:0;
+  background:var(--panel);
+  border:1px solid var(--rule);
+  border-radius:10px;
+  padding:.7rem .8rem .5rem;
+  display:flex;
+  flex-direction:column;
+  gap:.4rem;
+}
+.board-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  flex-shrink:0;
+}
+.board-head h2{
+  font-size:.86rem;
+  font-weight:700;
+  margin:0;
+}
+.board-head .n{
+  font-family:var(--mono);
+  font-size:.66rem;
+  color:var(--ink-soft);
+}
+
+.grid{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns: 118px repeat(5, 1fr);
+  grid-template-rows: 22px repeat(6, 1fr);
+  gap:3px;
+}
+.gcell{
+  border-radius:5px;
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+}
+.col-head{
+  font-family:var(--mono);
+  font-size:.6rem;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:0 .2rem;
+}
+.row-head{
+  font-size:.68rem;
+  font-weight:600;
+  color:var(--ink);
+  display:flex;
+  align-items:center;
+  padding-left:.15rem;
+  line-height:1.15;
+}
+.cell{
+  position:relative;
+  cursor:default;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:.3rem .4rem;
+}
+.cell.empty{
+  background:repeating-linear-gradient(135deg, #F0ECE2, #F0ECE2 4px, #E7E1D3 4px, #E7E1D3 8px);
+}
+.cell .pct{
+  font-family:var(--mono);
+  font-weight:700;
+  font-size:.92rem;
+  line-height:1;
+}
+.cell .name{
+  font-size:.6rem;
+  line-height:1.15;
+  margin-top:.2rem;
+  opacity:.85;
+}
+.cell.critico{background:var(--critico-bg);}
+.cell.critico .pct{color:var(--critico);}
+.cell.alerta{background:var(--alerta-bg);}
+.cell.alerta .pct{color:var(--alerta);}
+.cell.meta{background:var(--meta-bg);}
+.cell.meta .pct{color:var(--meta);}
+
+/* multi-item cell: mini-grid of chips, columns fixed by item count so wrapping is predictable */
+.cell.multi{
+  display:grid;
+  grid-template-columns: repeat(var(--ncols, 2), 1fr);
+  grid-auto-rows: 1fr;
+  gap:2px;
+  padding:2px;
+}
+.chip{
+  border-radius:4px;
+  padding:.16rem .28rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-width:0;
+}
+.chip .cid{
+  font-family:var(--mono);
+  font-size:.54rem;
+  opacity:.75;
+  line-height:1;
+}
+.chip .cpct{
+  font-family:var(--mono);
+  font-weight:700;
+  font-size:.66rem;
+  line-height:1.1;
+}
+.chip.critico{background:var(--critico-bg);}
+.chip.critico .cpct{color:var(--critico);}
+.chip.alerta{background:var(--alerta-bg);}
+.chip.alerta .cpct{color:var(--alerta);}
+.chip.meta{background:var(--meta-bg);}
+.chip.meta .cpct{color:var(--meta);}
+
+/* tooltip on hover */
+.cell .tip{
+  position:absolute;
+  left:6px; right:6px; bottom:100%;
+  margin-bottom:6px;
+  background:#262320;
+  color:#FBF9F5;
+  font-size:.66rem;
+  line-height:1.4;
+  padding:.4rem .55rem;
+  border-radius:5px;
+  z-index:5;
+  display:none;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+}
+.cell .tip b{display:block;font-size:.68rem;margin-bottom:.15rem;}
+.cell:hover .tip{display:block;}
+.cell:hover{outline:2px solid rgba(38,35,32,.35); z-index:3;}
+
+/* ---------- footer strip ---------- */
+.footbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:1rem;
+  font-family:var(--sans);
+  font-size:.68rem;
+  color:var(--ink-soft);
+  flex-shrink:0;
+}
+.footbar span:last-child{
+  text-align:right;
+  max-width:60%;
+}
+.footbar span:first-child{
+  flex-shrink:0;
+}
+
+@media (max-width:1100px){
+  html,body{overflow:auto;}
+  .app{height:auto;min-height:100vh;}
+  .grid{grid-template-columns:100px repeat(5,minmax(140px,1fr));overflow-x:auto;}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="topbar">
+    <div>
+      <h1>Cumplimiento de trazadoras — DESAM Constitución</h1>
+      <div class="sub">Producción acumulada ene–ago 2026, verificada contra MPO · agrupado por grupo etario y estamento</div>
+    </div>
+    <div class="meta">23 filas de seguimiento (21 trazadoras)<br>Corte agosto 2026 · Generado 18/08/26</div>
+  </div>
+
+  <div class="kpi-row" id="kpiRow"></div>
+
+  <div class="legend">
+    <span><span class="dot critico"></span><b>Crítico</b>&nbsp;&lt;70% o ≥130%</span>
+    <span><span class="dot alerta"></span><b>Alerta</b>&nbsp;70–90% o 110–130%</span>
+    <span><span class="dot meta"></span><b>En meta</b>&nbsp;90–110%</span>
+    <span class="spacer"></span>
+    <span class="hint">pasa el mouse sobre una celda para ver el detalle</span>
+  </div>
+
+  <div class="board">
+    <div class="board-head">
+      <h2>Todas las trazadoras — filas: grupo etario · columnas: estamento</h2>
+      <span class="n" id="boardN"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="footbar">
+    <span>DESAM Constitución — panel de trazadoras</span>
+    <span>Formato de referencia: dashboard "Trazadoras" — Servicio de Salud Maule, Unidad Modelo y Gestión Territorial</span>
+  </div>
+
+</div>
+
+<script>
+const DATA = [
+  {id:"1.1", trazadora:"Ctrl. desarrollo psicomotor 8 meses", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:83.51},
+  {id:"1.2", trazadora:"Ctrl. desarrollo psicomotor 3 años", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:87.97},
+  {id:"12", trazadora:"Ctrl. salud infantil <1 año", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:100.70},
+  {id:"21", trazadora:"Ctrl. salud infantil 6–9 años", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:49.58},
+  {id:"16", trazadora:"Consulta lactancia materna", grupo_etario:"Infancia", estamento:"Matronería", cumplimiento:116.60},
+  {id:"13", trazadora:"Crónicos respiratorios — IRA", grupo_etario:"Infancia", estamento:"Eq. Cardiovascular", cumplimiento:120.23},
+  {id:"14", trazadora:"Nutricional — malnutrición exceso", grupo_etario:"Infancia", estamento:"Nutrición", cumplimiento:19.51},
+  {id:"19", trazadora:"Nutricional 5° mes de vida", grupo_etario:"Infancia", estamento:"Nutrición", cumplimiento:116.22},
+
+  {id:"2", trazadora:"Educación grupal adolescentes", grupo_etario:"Adolescencia", estamento:"Eq. Multidisciplinario", cumplimiento:24.29},
+  {id:"3", trazadora:"Ingreso fertilidad adolescente", grupo_etario:"Adolescencia", estamento:"Matronería", cumplimiento:112.25},
+  {id:"11", trazadora:"Consulta nutricional adolescente", grupo_etario:"Adolescencia", estamento:"Nutrición", cumplimiento:66.15},
+
+  {id:"4", trazadora:"Control de climaterio", grupo_etario:"Adulto", estamento:"Matronería", cumplimiento:77.06},
+  {id:"5.1", trazadora:"Ingresos crónicos 25–64 años", grupo_etario:"Adulto", estamento:"Eq. Cardiovascular", cumplimiento:78.15},
+  {id:"18", trazadora:"Controles integrales crónicos", grupo_etario:"Adulto", estamento:"Eq. Cardiovascular", cumplimiento:46.83},
+  {id:"20", trazadora:"Seguimientos ECICEP", grupo_etario:"Adulto", estamento:"Eq. Cardiovascular", cumplimiento:21.01},
+
+  {id:"5.2", trazadora:"Ingresos crónicos 65+ años", grupo_etario:"Adulto mayor", estamento:"Eq. Cardiovascular", cumplimiento:61.07},
+  {id:"7", trazadora:"Morbilidad odontológica AM", grupo_etario:"Adulto mayor", estamento:"Odontología", cumplimiento:82.83},
+  {id:"8", trazadora:"EMPAM seguimiento autovalente", grupo_etario:"Adulto mayor", estamento:"Enf./Matronería", cumplimiento:85.55},
+
+  {id:"6", trazadora:"Intervención psicosocial grupal", grupo_etario:"Transversal", estamento:"Psic./Salud mental", cumplimiento:547.17},
+  {id:"9", trazadora:"Consulta de morbilidad", grupo_etario:"Transversal", estamento:"Medicina", cumplimiento:129.25},
+  {id:"10", trazadora:"Crónicos respiratorios — ERA", grupo_etario:"Transversal", estamento:"Eq. Cardiovascular", cumplimiento:131.35},
+  {id:"15", trazadora:"Visita domiciliaria integral", grupo_etario:"Transversal", estamento:"Eq. Multidisciplinario", cumplimiento:139.67},
+  {id:"17", trazadora:"Salud mental (por médico)", grupo_etario:"Transversal", estamento:"Medicina", cumplimiento:134.91},
+];
+
+const ROWS = ["Infancia","Adolescencia","Adulto","Adulto mayor","Transversal"];
+const COLS = ["Enf./Matronería","Matronería","Eq. Cardiovascular","Nutrición","Eq. Multidisciplinario","Odontología","Psic./Salud mental","Medicina"];
+
+// Colapsar columnas poco pobladas para caber en 5 columnas visibles:
+// Enf./Matronería + Matronería -> "Enfermería/Matronería"
+// Eq. Multidisciplinario + Odontología + Psic./Salud mental -> se integran donde corresponde
+const COL_MAP = {
+  "Enf./Matronería": "Enfermería / Matronería",
+  "Matronería": "Enfermería / Matronería",
+  "Eq. Cardiovascular": "Eq. Cardiovascular",
+  "Nutrición": "Nutrición",
+  "Eq. Multidisciplinario": "Multidisc. / Otros",
+  "Odontología": "Multidisc. / Otros",
+  "Psic./Salud mental": "Multidisc. / Otros",
+  "Medicina": "Medicina",
+};
+const COLS_FINAL = ["Enfermería / Matronería","Eq. Cardiovascular","Nutrición","Medicina","Multidisc. / Otros"];
+
+DATA.forEach(d => d.col = COL_MAP[d.estamento]);
+
+function semaforo(p){
+  if(p < 70 || p >= 130) return "critico";
+  if(p < 90 || p >= 110) return "alerta";
+  return "meta";
+}
+function pct(n){ return n.toFixed(1).replace(".",",") + "%"; }
+DATA.forEach(d => d.semaforo = semaforo(d.cumplimiento));
+
+/* KPIs */
+const nTotal = DATA.length;
+const nCrit  = DATA.filter(d=>d.semaforo==="critico").length;
+const nAlert = DATA.filter(d=>d.semaforo==="alerta").length;
+const nMeta  = DATA.filter(d=>d.semaforo==="meta").length;
+
+document.getElementById("kpiRow").innerHTML = `
+  <div class="kpi ink"><div class="n">${nTotal}</div><div class="lbl">Filas de seguimiento monitoreadas</div></div>
+  <div class="kpi critico"><div class="n">${nCrit} / ${nTotal}</div><div class="lbl">En rango crítico — &lt;70% o ≥130%</div></div>
+  <div class="kpi alerta"><div class="n">${nAlert} / ${nTotal}</div><div class="lbl">En alerta — 70–90% o 110–130%</div></div>
+  <div class="kpi meta"><div class="n">${nMeta} / ${nTotal}</div><div class="lbl">En meta — 90% a 110%</div></div>
+`;
+
+document.getElementById("boardN").textContent = `n=${nTotal}`;
+
+/* Build grid: header row + 5 body rows, 1 label col + 5 data cols */
+const grid = document.getElementById("grid");
+let html = `<div class="gcell col-head"></div>`;
+COLS_FINAL.forEach(c => html += `<div class="gcell col-head">${c}</div>`);
+
+ROWS.forEach(r => {
+  html += `<div class="gcell row-head">${r}</div>`;
+  COLS_FINAL.forEach(c => {
+    const items = DATA.filter(d => d.grupo_etario === r && d.col === c);
+    if(items.length === 0){
+      html += `<div class="gcell cell empty"></div>`;
+    } else if(items.length === 1){
+      const d = items[0];
+      html += `
+        <div class="gcell cell ${d.semaforo}">
+          <div class="pct">${pct(d.cumplimiento)}</div>
+          <div class="name">${d.id} · ${d.trazadora}</div>
+          <div class="tip"><b>${d.id} — ${d.trazadora}</b>${r} · ${d.estamento}<br>Cumplimiento: ${pct(d.cumplimiento)}</div>
+        </div>`;
+    } else {
+      // multiple trazadoras share a cell: render each as its own colored chip
+      const tipRows = items.map(d=>`${d.id} ${d.trazadora}: ${pct(d.cumplimiento)}`).join("<br>");
+      const chips = items.map(d => `
+        <div class="chip ${d.semaforo}" title="${d.id} — ${d.trazadora}">
+          <div class="cid">${d.id}</div>
+          <div class="cpct">${pct(d.cumplimiento)}</div>
+        </div>
+      `).join("");
+      // 2 items -> 2 cols x 1 row; 3 -> 3x1; 4 -> 2x2; 5 -> 3x2 (con una celda vacía visual, aceptable)
+      const ncols = items.length === 4 ? 2 : Math.min(items.length, 3);
+      html += `
+        <div class="gcell cell multi" style="--ncols:${ncols}">
+          ${chips}
+          <div class="tip"><b>${r} · ${c}</b>${tipRows}</div>
+        </div>`;
+    }
+  });
+});
+grid.innerHTML = html;
+</script>
+</body>
+</html>
