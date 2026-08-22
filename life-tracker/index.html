@@ -1,439 +1,416 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Life OS · Health Dashboard</title>
 
 <style>
-:root {
-  --bg: #08110d;
-  --panel: #101c16;
-  --panel-2: #14231b;
-  --border: #26362d;
+:root{
+  --bg:#07100c;
+  --panel:#0f1b15;
+  --panel-2:#13231a;
+  --border:#24382d;
 
-  --text: #f5f7f5;
-  --muted: #8fa095;
+  --text:#f4f7f5;
+  --muted:#90a098;
 
-  --green: #74d68a;
-  --green-dark: #183c24;
-  --yellow: #e8c769;
-  --red: #e87f73;
-  --blue: #84b7ff;
+  --green:#75d98b;
+  --yellow:#e7c96d;
+  --red:#ea8177;
+  --blue:#8cbcff;
+  --cyan:#84d8da;
+  --purple:#b8a2ff;
 
-  --radius: 18px;
+  --radius:18px;
 }
 
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#020504;
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
 }
 
-body {
-  margin: 0;
-  background: #030705;
-  color: var(--text);
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "Segoe UI",
-    sans-serif;
-}
-
-/* =========================
-   16:9 DASHBOARD CANVAS
-========================= */
-
-.dashboard {
-  width: min(100vw, 177.78vh);
-  min-height: min(100vh, 56.25vw);
-  aspect-ratio: 16 / 9;
-
-  margin: auto;
-
+.dashboard{
+  width:min(100vw,177.78vh);
+  min-height:min(100vh,56.25vw);
+  aspect-ratio:16/9;
+  margin:auto;
+  padding:24px 28px;
+  display:grid;
+  grid-template-rows:auto auto 1fr auto;
+  gap:14px;
   background:
-    radial-gradient(
-      circle at 50% -10%,
-      rgba(80, 160, 100, .12),
-      transparent 38%
-    ),
+    radial-gradient(circle at 50% -10%,rgba(85,170,105,.12),transparent 38%),
     var(--bg);
-
-  padding: 28px 34px;
-
-  display: grid;
-  grid-template-rows:
-    auto auto 1fr auto;
-
-  gap: 20px;
 }
 
-/* =========================
-   HEADER
-========================= */
-
-header {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+header{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
 }
 
-.brand {
-  font-size: 14px;
-  letter-spacing: .14em;
-  color: var(--muted);
-  text-transform: uppercase;
+.brand,
+.phase,
+.eyebrow,
+.panel-title{
+  text-transform:uppercase;
+  letter-spacing:.13em;
 }
 
-.date-block {
-  text-align: center;
+.brand{
+  font-size:12px;
+  color:var(--muted);
 }
 
-.date {
-  font-size: clamp(26px, 2.4vw, 46px);
-  font-weight: 700;
-  letter-spacing: -.04em;
+.date-block{
+  text-align:center;
 }
 
-.phase {
-  margin-top: 4px;
-  color: var(--green);
-  font-size: 13px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
+.date{
+  font-size:clamp(24px,2.2vw,42px);
+  font-weight:750;
+  letter-spacing:-.045em;
 }
 
-.status {
-  justify-self: end;
-
-  padding: 8px 13px;
-  border: 1px solid #31583c;
-  border-radius: 999px;
-
-  color: var(--green);
-  background: rgba(74, 130, 84, .08);
-
-  font-size: 13px;
+.phase{
+  font-size:11px;
+  color:var(--green);
+  margin-top:3px;
 }
 
-/* =========================
-   STRATEGIC OBJECTIVE
-========================= */
-
-.objective {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 15px 20px;
-
-  background: linear-gradient(
-    90deg,
-    rgba(60,110,70,.19),
-    rgba(15,28,21,.6)
-  );
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+.status{
+  justify-self:end;
+  color:var(--green);
+  border:1px solid #2b5739;
+  background:rgba(72,133,84,.08);
+  border-radius:999px;
+  padding:7px 11px;
+  font-size:12px;
 }
 
-.objective-title {
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: var(--muted);
+.objective{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:12px 17px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:linear-gradient(90deg,rgba(62,118,75,.16),rgba(15,28,21,.45));
 }
 
-.objective-value {
-  margin-top: 5px;
-  font-size: 20px;
-  font-weight: 600;
+.eyebrow{
+  font-size:10px;
+  color:var(--muted);
 }
 
-.target {
-  text-align: right;
+.objective-main{
+  font-size:16px;
+  font-weight:650;
+  margin-top:4px;
 }
 
-.target strong {
-  font-size: 22px;
-  color: var(--green);
+.objective-target{
+  text-align:right;
+  color:var(--muted);
+  font-size:11px;
 }
 
-/* =========================
-   MAIN GRID
-========================= */
-
-.main {
-  min-height: 0;
-
-  display: grid;
-  grid-template-columns: 1.05fr 1.35fr 1fr;
-  gap: 18px;
+.objective-target strong{
+  display:block;
+  color:var(--green);
+  font-size:21px;
 }
 
-.panel {
-  background: rgba(16, 28, 22, .88);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-
-  padding: 18px;
-
-  min-width: 0;
+.quadrants{
+  min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:14px;
 }
 
-.panel-title {
-  margin-bottom: 14px;
-
-  font-size: 12px;
-  color: var(--muted);
-
-  text-transform: uppercase;
-  letter-spacing: .12em;
+.panel{
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+  background:rgba(15,27,21,.92);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:15px 16px;
 }
 
-/* =========================
-   KPI CARDS
-========================= */
-
-.kpi-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 11px;
+.panel-title{
+  font-size:10px;
+  color:var(--muted);
+  margin-bottom:10px;
 }
 
-.kpi {
-  padding: 13px;
-
-  background: var(--panel-2);
-  border: 1px solid #24382c;
-  border-radius: 14px;
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
 }
 
-.kpi-label {
-  color: var(--muted);
-  font-size: 11px;
+.kpi{
+  border:1px solid #23372b;
+  background:var(--panel-2);
+  border-radius:12px;
+  padding:9px 10px;
 }
 
-.kpi-value {
-  margin-top: 5px;
-
-  font-size: clamp(20px, 1.6vw, 30px);
-  font-weight: 700;
-
-  letter-spacing: -.04em;
+.kpi-label{
+  font-size:9px;
+  color:var(--muted);
 }
 
-.kpi-unit {
-  margin-left: 3px;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 400;
+.kpi-value{
+  font-size:clamp(17px,1.25vw,24px);
+  font-weight:750;
+  letter-spacing:-.04em;
+  margin-top:3px;
 }
 
-.good { color: var(--green); }
-.warning { color: var(--yellow); }
-.bad { color: var(--red); }
-
-/* =========================
-   RISK STACK
-========================= */
-
-.risk-row {
-  display: grid;
-  grid-template-columns: 90px 1fr 45px;
-  gap: 10px;
-  align-items: center;
-
-  margin-bottom: 12px;
+.kpi-unit{
+  font-size:9px;
+  color:var(--muted);
+  font-weight:450;
+  letter-spacing:0;
 }
 
-.risk-label {
-  color: #d8ded9;
-  font-size: 12px;
+.good{color:var(--green)}
+.warn{color:var(--yellow)}
+.bad{color:var(--red)}
+
+.current-summary{
+  margin-top:10px;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:10px;
 }
 
-.bar {
-  height: 8px;
-  overflow: hidden;
-
-  background: #26352d;
-  border-radius: 20px;
+.summary-box{
+  background:#0b1510;
+  border:1px solid #1e3127;
+  border-radius:10px;
+  padding:10px 11px;
+  font-size:10px;
+  line-height:1.45;
+  color:#cad4cd;
 }
 
-.fill {
-  height: 100%;
-  border-radius: 20px;
+.summary-box strong{color:var(--text)}
+
+.risk-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
 }
 
-.risk-value {
-  text-align: right;
-  color: var(--muted);
-  font-size: 11px;
+.risk{
+  display:grid;
+  grid-template-columns:78px 1fr 44px;
+  gap:8px;
+  align-items:center;
 }
 
-.clinical {
-  margin-top: 18px;
-  padding: 14px;
-
-  background: #0c1711;
-  border-left: 3px solid var(--yellow);
-  border-radius: 9px;
-
-  color: #cbd4cd;
-
-  font-size: 12px;
-  line-height: 1.5;
+.risk span{
+  font-size:10px;
+  color:#dce3de;
 }
 
-/* =========================
-   WEEKLY KPI TABLE
-========================= */
-
-.week-row {
-  display: grid;
-  grid-template-columns: 1.2fr .75fr .75fr 44px;
-  gap: 9px;
-
-  align-items: center;
-
-  padding: 9px 0;
-
-  border-bottom: 1px solid #203027;
+.bar{
+  height:6px;
+  background:#24342b;
+  border-radius:999px;
+  overflow:hidden;
 }
 
-.week-row.header {
-  padding-top: 0;
-
-  color: var(--muted);
-  font-size: 10px;
-  text-transform: uppercase;
+.fill{
+  height:100%;
+  border-radius:999px;
 }
 
-.week-name {
-  font-size: 12px;
+.risk .value{
+  text-align:right;
+  color:var(--muted);
+  font-size:10px;
 }
 
-.week-value {
-  font-size: 12px;
+.clinical{
+  margin-top:12px;
+  border-left:3px solid var(--yellow);
+  border-radius:8px;
+  background:#0b1510;
+  padding:10px 11px;
+  font-size:10px;
+  line-height:1.42;
+  color:#cbd4ce;
 }
 
-.dot {
-  width: 9px;
-  height: 9px;
-
-  justify-self: center;
-
-  border-radius: 50%;
-  background: var(--yellow);
+.clinical strong{
+  color:var(--text);
 }
 
-/* =========================
-   PROGRESS
-========================= */
-
-.progress-group {
-  margin-top: 17px;
+.lower-left-grid{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:12px;
+  height:calc(100% - 20px);
 }
 
-.progress-title {
-  display: flex;
-  justify-content: space-between;
-
-  margin-bottom: 6px;
-
-  color: var(--muted);
-  font-size: 11px;
+.week-table{
+  display:grid;
+  gap:0;
 }
 
-.progress-bar {
-  height: 9px;
-
-  overflow: hidden;
-
-  background: #24342b;
-  border-radius: 20px;
+.week-row{
+  display:grid;
+  grid-template-columns:1.15fr .65fr .72fr 12px;
+  gap:7px;
+  align-items:center;
+  min-height:25px;
+  border-bottom:1px solid #203028;
+  font-size:9.5px;
 }
 
-.progress-bar > div {
-  height: 100%;
-
-  background:
-    linear-gradient(
-      90deg,
-      #39784a,
-      var(--green)
-    );
-
-  border-radius: 20px;
+.week-row.head{
+  color:var(--muted);
+  font-size:8.5px;
+  text-transform:uppercase;
 }
 
-/* =========================
-   FOOTER
-========================= */
-
-footer {
-  display: grid;
-  grid-template-columns: 1fr auto;
-
-  align-items: center;
-
-  color: var(--muted);
-  font-size: 11px;
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--yellow);
 }
 
-.legend {
-  display: flex;
-  gap: 15px;
+.nutrition-box{
+  border:1px solid #23372b;
+  background:var(--panel-2);
+  border-radius:12px;
+  padding:10px 11px;
 }
 
-.legend span {
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.nutrition-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:6px;
 }
 
-.mini-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
+.nutrition-item{
+  font-size:9.5px;
+  color:#cbd4ce;
 }
 
-/* =========================
-   MOBILE
-========================= */
+.nutrition-item b{
+  color:var(--text);
+}
 
-@media (max-width: 900px) {
+.chart-panel{
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+}
 
-  .dashboard {
-    width: 100%;
-    min-height: auto;
-    aspect-ratio: auto;
+.chart-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+  margin-bottom:5px;
+}
 
-    padding: 20px;
+.chart-sub{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:2px;
+}
+
+.chart-note{
+  font-size:8.5px;
+  color:var(--muted);
+  text-align:right;
+  max-width:260px;
+}
+
+#trendChart{
+  width:100%;
+  height:100%;
+  min-height:150px;
+  display:block;
+}
+
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:7px 12px;
+  padding-top:3px;
+  font-size:8.5px;
+  color:var(--muted);
+}
+
+.legend-item{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.swatch{
+  width:9px;
+  height:3px;
+  border-radius:999px;
+}
+
+footer{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+footer strong{
+  color:#dfe6e1;
+}
+
+@media(max-width:1000px){
+  .dashboard{
+    width:100%;
+    aspect-ratio:auto;
+    min-height:auto;
+    padding:18px;
   }
-
-  header {
-    grid-template-columns: 1fr;
-    gap: 10px;
+  header{
+    grid-template-columns:1fr;
+    gap:7px;
   }
-
-  .brand,
-  .status {
-    justify-self: center;
+  .brand,.status{justify-self:center}
+  .objective{display:block}
+  .objective-target{text-align:left;margin-top:9px}
+  .quadrants{
+    grid-template-columns:1fr;
+    grid-template-rows:auto;
   }
-
-  .main {
-    grid-template-columns: 1fr;
+  .kpi-grid{
+    grid-template-columns:repeat(2,1fr);
   }
-
-  .objective {
-    display: block;
+  .current-summary,
+  .lower-left-grid{
+    grid-template-columns:1fr;
   }
-
-  .target {
-    margin-top: 10px;
-    text-align: left;
+  .chart-panel{
+    min-height:360px;
+  }
+  footer{
+    flex-direction:column;
   }
 }
 </style>
@@ -443,412 +420,557 @@ footer {
 
 <main class="dashboard">
 
-  <!-- HEADER -->
   <header>
-
-    <div class="brand">
-      Life OS · Health Performance
-    </div>
+    <div class="brand">Life OS · Health Performance</div>
 
     <div class="date-block">
-      <div class="date">
-        22 Agosto 2026
-      </div>
-
-      <div class="phase">
-        T0 · Baseline
-      </div>
+      <div class="date">22 Agosto 2026</div>
+      <div class="phase">T0 · Baseline / Launch date</div>
     </div>
 
-    <div class="status">
-      ● System Online
-    </div>
-
+    <div class="status">● System Online</div>
   </header>
 
 
-  <!-- STRATEGIC OBJECTIVE -->
   <section class="objective">
-
     <div>
-      <div class="objective-title">
-        Strategic Objective
-      </div>
-
-      <div class="objective-value">
-        Reducir adiposidad visceral + construir fitness cardiorrespiratorio y fuerza
+      <div class="eyebrow">Strategic Objective</div>
+      <div class="objective-main">
+        Reducir adiposidad visceral + construir capacidad cardiorrespiratoria, fuerza y sueño recuperador
       </div>
     </div>
 
-    <div class="target">
-      Primer milestone<br>
+    <div class="objective-target">
+      First clinical milestone
       <strong>95,9 kg</strong>
-      <span style="color:var(--muted)"> · −10%</span>
+      −10% desde T0 · cintura &lt;120 cm
     </div>
-
   </section>
 
 
-  <!-- MAIN -->
-  <section class="main">
+  <section class="quadrants">
 
-
-    <!-- CURRENT STATE -->
+    <!-- Q1 -->
     <article class="panel">
-
-      <div class="panel-title">
-        01 · Current State
-      </div>
+      <div class="panel-title">01 · Current State</div>
 
       <div class="kpi-grid">
-
         <div class="kpi">
           <div class="kpi-label">Peso</div>
-          <div class="kpi-value bad">
-            106,5
-            <span class="kpi-unit">kg</span>
-          </div>
+          <div class="kpi-value bad">106,5 <span class="kpi-unit">kg</span></div>
         </div>
 
         <div class="kpi">
           <div class="kpi-label">Cintura</div>
-          <div class="kpi-value bad">
-            127
-            <span class="kpi-unit">cm</span>
-          </div>
+          <div class="kpi-value bad">127 <span class="kpi-unit">cm</span></div>
         </div>
 
         <div class="kpi">
           <div class="kpi-label">IMC</div>
-          <div class="kpi-value bad">
-            32,9
-          </div>
+          <div class="kpi-value bad">32,9</div>
         </div>
 
         <div class="kpi">
           <div class="kpi-label">PA basal</div>
-          <div class="kpi-value warning">
-            129/88
-          </div>
+          <div class="kpi-value warn">129/88</div>
         </div>
 
         <div class="kpi">
-          <div class="kpi-label">FC reposo · 26 sem</div>
-          <div class="kpi-value good">
-            67
-            <span class="kpi-unit">lpm</span>
-          </div>
+          <div class="kpi-label">FC reposo</div>
+          <div class="kpi-value good">67 <span class="kpi-unit">lpm</span></div>
         </div>
 
         <div class="kpi">
           <div class="kpi-label">Pasos · 26 sem</div>
-          <div class="kpi-value">
-            7.105
-          </div>
+          <div class="kpi-value">7.105</div>
         </div>
 
         <div class="kpi">
           <div class="kpi-label">Sueño · 26 sem</div>
-          <div class="kpi-value bad">
-            6:37
-            <span class="kpi-unit">h</span>
-          </div>
+          <div class="kpi-value bad">6:37 <span class="kpi-unit">h</span></div>
         </div>
 
         <div class="kpi">
           <div class="kpi-label">Agua habitual</div>
-          <div class="kpi-value bad">
-            0,4
-            <span class="kpi-unit">L/d</span>
-          </div>
+          <div class="kpi-value bad">0,4 <span class="kpi-unit">L/d</span></div>
         </div>
-
       </div>
 
+      <div class="current-summary">
+        <div class="summary-box">
+          <strong>Perfil funcional:</strong> actividad cotidiana moderada, pero sin entrenamiento estructurado. La principal oportunidad es transformar movimiento habitual en estímulo fisiológico deliberado.
+        </div>
+        <div class="summary-box">
+          <strong>Exposiciones:</strong> OH 0 · tabaco 0 · drogas 0 · sin fármacos metabólicos ni suplementos relevantes.
+        </div>
+      </div>
     </article>
 
 
-    <!-- METABOLIC -->
+    <!-- Q2 -->
     <article class="panel">
+      <div class="panel-title">02 · Metabolic / Clinical Risk</div>
 
-      <div class="panel-title">
-        02 · Metabolic & Clinical Risk
-      </div>
-
-
-      <div class="risk-row">
-        <div class="risk-label">Triglicéridos</div>
-
-        <div class="bar">
-          <div class="fill"
-               style="width:73%;background:var(--red)">
-          </div>
+      <div class="risk-grid">
+        <div class="risk">
+          <span>TG</span>
+          <div class="bar"><div class="fill" style="width:73%;background:var(--red)"></div></div>
+          <div class="value">219</div>
         </div>
 
-        <div class="risk-value">
-          219
-        </div>
-      </div>
-
-
-      <div class="risk-row">
-        <div class="risk-label">HDL</div>
-
-        <div class="bar">
-          <div class="fill"
-               style="width:50%;background:var(--red)">
-          </div>
+        <div class="risk">
+          <span>HDL</span>
+          <div class="bar"><div class="fill" style="width:50%;background:var(--red)"></div></div>
+          <div class="value">30</div>
         </div>
 
-        <div class="risk-value">
-          30
-        </div>
-      </div>
-
-
-      <div class="risk-row">
-        <div class="risk-label">LDL</div>
-
-        <div class="bar">
-          <div class="fill"
-               style="width:67%;background:var(--yellow)">
-          </div>
+        <div class="risk">
+          <span>LDL</span>
+          <div class="bar"><div class="fill" style="width:67%;background:var(--yellow)"></div></div>
+          <div class="value">134</div>
         </div>
 
-        <div class="risk-value">
-          134
+        <div class="risk">
+          <span>ALT</span>
+          <div class="bar"><div class="fill" style="width:85%;background:var(--red)"></div></div>
+          <div class="value">85</div>
+        </div>
+
+        <div class="risk">
+          <span>HbA1c</span>
+          <div class="bar"><div class="fill" style="width:54%;background:var(--green)"></div></div>
+          <div class="value">5,4%</div>
+        </div>
+
+        <div class="risk">
+          <span>Glucosa</span>
+          <div class="bar"><div class="fill" style="width:45%;background:var(--green)"></div></div>
+          <div class="value">90</div>
         </div>
       </div>
-
-
-      <div class="risk-row">
-        <div class="risk-label">ALT</div>
-
-        <div class="bar">
-          <div class="fill"
-               style="width:85%;background:var(--red)">
-          </div>
-        </div>
-
-        <div class="risk-value">
-          85
-        </div>
-      </div>
-
-
-      <div class="risk-row">
-        <div class="risk-label">HbA1c</div>
-
-        <div class="bar">
-          <div class="fill"
-               style="width:54%;background:var(--green)">
-          </div>
-        </div>
-
-        <div class="risk-value">
-          5,4%
-        </div>
-      </div>
-
-
-      <div class="risk-row">
-        <div class="risk-label">Glicemia</div>
-
-        <div class="bar">
-          <div class="fill"
-               style="width:45%;background:var(--green)">
-          </div>
-        </div>
-
-        <div class="risk-value">
-          90
-        </div>
-      </div>
-
 
       <div class="clinical">
-
-        <strong style="color:white">
-          Executive Clinical Assessment
-        </strong>
-
-        <br><br>
-
-        Obesidad central con fenotipo metabólico desfavorable:
-        TG ↑ + HDL ↓ + adiposidad abdominal.
-
-        <br><br>
-
-        ALT elevada con patrón hepatocelular leve y ausencia de alcohol:
-        <strong>MASLD probable, aún no confirmada.</strong>
-
-        <br><br>
-
-        Glucemia, HbA1c, función renal, tiroidea y hematológica conservadas.
-
+        <strong>Executive clinical assessment.</strong>
+        Obesidad central con TG↑ + HDL↓ y ALT 85 U/L.
+        En ausencia de alcohol, MASLD es hipótesis prioritaria, aún no confirmada.
+        Glucemia/HbA1c, función renal, tiroidea y hematológica conservadas.
+        El riesgo absoluto inmediato es bajo por edad; la trayectoria de riesgo a largo plazo es modificable y hoy constituye el principal foco preventivo.
       </div>
-
     </article>
 
 
-    <!-- WEEK 1 -->
+    <!-- Q3 -->
     <article class="panel">
+      <div class="panel-title">03 · Week 1 OKRs + Nutrition Operating Model</div>
 
-      <div class="panel-title">
-        03 · Week 1 OKRs
-      </div>
+      <div class="lower-left-grid">
 
+        <div class="week-table">
+          <div class="week-row head">
+            <div>KPI</div><div>T0</div><div>Target</div><div></div>
+          </div>
 
-      <div class="week-row header">
-        <div>KPI</div>
-        <div>Baseline</div>
-        <div>Target</div>
-        <div></div>
-      </div>
+          <div class="week-row">
+            <div>Entrenamientos</div><div>0</div><div>≥2</div><div class="dot"></div>
+          </div>
 
+          <div class="week-row">
+            <div>Pasos/día</div><div>7.105</div><div>≥7.500</div><div class="dot"></div>
+          </div>
 
-      <div class="week-row">
-        <div class="week-name">Entrenamientos</div>
-        <div class="week-value">0</div>
-        <div class="week-value">≥ 2</div>
-        <div class="dot"></div>
-      </div>
+          <div class="week-row">
+            <div>Sueño</div><div>6:37</div><div>≥7h · 5/7</div><div class="dot"></div>
+          </div>
 
+          <div class="week-row">
+            <div>Agua</div><div>0,4 L</div><div>≥1,5 L · 6/7</div><div class="dot"></div>
+          </div>
 
-      <div class="week-row">
-        <div class="week-name">Pasos / día</div>
-        <div class="week-value">7.105</div>
-        <div class="week-value">≥ 7.500</div>
-        <div class="dot"></div>
-      </div>
+          <div class="week-row">
+            <div>HBPM</div><div>129/88</div><div>7 días</div><div class="dot"></div>
+          </div>
 
-
-      <div class="week-row">
-        <div class="week-name">Sueño</div>
-        <div class="week-value">6:37</div>
-        <div class="week-value">≥7h · 5/7</div>
-        <div class="dot"></div>
-      </div>
-
-
-      <div class="week-row">
-        <div class="week-name">Agua</div>
-        <div class="week-value">0,4 L</div>
-        <div class="week-value">≥1,5 L · 6/7</div>
-        <div class="dot"></div>
-      </div>
-
-
-      <div class="week-row">
-        <div class="week-name">Ultra-procesados</div>
-        <div class="week-value">—</div>
-        <div class="week-value">0 no planif.</div>
-        <div class="dot"></div>
-      </div>
-
-
-      <div class="week-row">
-        <div class="week-name">HBPM</div>
-        <div class="week-value">129/88</div>
-        <div class="week-value">7 días</div>
-        <div class="dot"></div>
-      </div>
-
-
-      <div class="week-row">
-        <div class="week-name">Watch</div>
-        <div class="week-value">Variable</div>
-        <div class="week-value">24/7</div>
-        <div class="dot"></div>
-      </div>
-
-
-      <!-- LONGITUDINAL TARGET -->
-
-      <div class="progress-group">
-
-        <div class="progress-title">
-          <span>Peso · Phase 1</span>
-          <span>106,5 → 95,9 kg</span>
+          <div class="week-row">
+            <div>Apple Watch</div><div>Variable</div><div>24/7</div><div class="dot"></div>
+          </div>
         </div>
 
-        <div class="progress-bar">
-          <div style="width:0%"></div>
+        <div class="nutrition-box">
+          <div class="panel-title" style="margin-bottom:8px">Nutrition Model</div>
+
+          <div class="nutrition-grid">
+            <div class="nutrition-item"><b>Patrón:</b> mediterráneo / DASH</div>
+            <div class="nutrition-item"><b>Pérdida inicial:</b> 5–10% del peso</div>
+            <div class="nutrition-item"><b>Proteína:</b> 110–140 g/d</div>
+            <div class="nutrition-item"><b>Pescado:</b> ≥2 veces/sem</div>
+            <div class="nutrition-item"><b>Legumbres:</b> 2–4 veces/sem</div>
+            <div class="nutrition-item"><b>Verduras:</b> ≥½ plato principal</div>
+            <div class="nutrition-item"><b>Carbohidratos:</b> integrales + porción medida</div>
+            <div class="nutrition-item"><b>Azúcar añadida:</b> ≈0 habitual</div>
+            <div class="nutrition-item"><b>OH:</b> 0</div>
+          </div>
         </div>
 
       </div>
+    </article>
 
 
-      <div class="progress-group">
-
-        <div class="progress-title">
-          <span>Cintura · Milestone 1</span>
-          <span>127 → &lt;120 cm</span>
+    <!-- Q4 -->
+    <article class="panel chart-panel">
+      <div class="chart-head">
+        <div>
+          <div class="panel-title" style="margin-bottom:0">04 · Longitudinal Performance</div>
+          <div class="chart-sub">
+            geom_line concept · índice relativo a T0 = 100
+          </div>
         </div>
 
-        <div class="progress-bar">
-          <div style="width:0%"></div>
+        <div class="chart-note">
+          Series: agua, sueño, peso, HDL, TG y cintura. Los valores crudos se mantienen en LIFE_DATA.
         </div>
-
       </div>
 
+      <svg
+        id="trendChart"
+        viewBox="0 0 760 250"
+        role="img"
+        aria-label="Series longitudinales normalizadas de agua, sueño, peso, HDL, triglicéridos y cintura">
+      </svg>
 
-      <div class="progress-group">
-
-        <div class="progress-title">
-          <span>Sueño · Operational Target</span>
-          <span>6:37 → ≥7:15</span>
-        </div>
-
-        <div class="progress-bar">
-          <div style="width:0%"></div>
-        </div>
-
-      </div>
-
+      <div id="chartLegend" class="legend"></div>
     </article>
 
   </section>
 
 
-  <!-- FOOTER -->
   <footer>
+    <div>
+      Life OS · <strong>T0 22/08/2026</strong> · Next weekly review:
+      <strong>29/08/2026</strong>
+    </div>
 
     <div>
-      Life OS · T0 baseline · Next review:
-      <strong style="color:#dfe7e1">
-        29 agosto 2026
-      </strong>
+      Primary endpoints: peso · cintura · sueño · TG/HDL · fitness · PA
     </div>
-
-    <div class="legend">
-
-      <span>
-        <span class="mini-dot"
-              style="background:var(--green)">
-        </span>
-        On target
-      </span>
-
-      <span>
-        <span class="mini-dot"
-              style="background:var(--yellow)">
-        </span>
-        Monitor
-      </span>
-
-      <span>
-        <span class="mini-dot"
-              style="background:var(--red)">
-        </span>
-        Priority
-      </span>
-
-    </div>
-
   </footer>
 
 </main>
+
+
+<script>
+
+/*
+  ACTUALIZACIÓN SEMANAL:
+  añade una nueva fila a LIFE_DATA.
+  Usa null cuando un biomarcador no haya sido medido.
+*/
+
+const LIFE_DATA = [
+  {
+    date: "22/08/2026",
+    water_l: 0.4,
+    sleep_h: 6 + 37/60,
+    weight_kg: 106.5,
+    hdl_mgdl: 30,
+    tg_mgdl: 219,
+    waist_cm: 127
+  }
+
+  // EJEMPLO:
+  // ,{
+  //   date: "29/08/2026",
+  //   water_l: 1.6,
+  //   sleep_h: 7.15,
+  //   weight_kg: 105.6,
+  //   hdl_mgdl: null,
+  //   tg_mgdl: null,
+  //   waist_cm: 125.8
+  // }
+];
+
+
+const SERIES = [
+  { key:"water_l",   label:"Agua",          unit:"L/d",   color:"#84d8da" },
+  { key:"sleep_h",   label:"Sueño",         unit:"h",     color:"#8cbcff" },
+  { key:"weight_kg", label:"Peso",          unit:"kg",    color:"#ea8177" },
+  { key:"hdl_mgdl",  label:"HDL",           unit:"mg/dL", color:"#75d98b" },
+  { key:"tg_mgdl",   label:"Triglicéridos", unit:"mg/dL", color:"#e7c96d" },
+  { key:"waist_cm",  label:"Cintura",       unit:"cm",    color:"#b8a2ff" }
+];
+
+
+(function renderLifeChart(){
+
+  const svg = document.getElementById("trendChart");
+  const legend = document.getElementById("chartLegend");
+
+  const NS = "http://www.w3.org/2000/svg";
+
+  const W = 760;
+  const H = 250;
+
+  const M = {
+    l:45,
+    r:15,
+    t:18,
+    b:38
+  };
+
+  const innerW = W - M.l - M.r;
+  const innerH = H - M.t - M.b;
+
+  const baseline = LIFE_DATA[0];
+
+  const normalized = LIFE_DATA.map(row => {
+
+    const out = {date:row.date};
+
+    SERIES.forEach(series => {
+
+      const current = row[series.key];
+      const base = baseline[series.key];
+
+      out[series.key] =
+        (current == null || base == null || base === 0)
+          ? null
+          : (current / base) * 100;
+
+    });
+
+    return out;
+
+  });
+
+
+  const values = [];
+
+  normalized.forEach(row => {
+    SERIES.forEach(series => {
+      if(Number.isFinite(row[series.key])){
+        values.push(row[series.key]);
+      }
+    });
+  });
+
+
+  let minY = values.length ? Math.min(...values) : 95;
+  let maxY = values.length ? Math.max(...values) : 105;
+
+  minY = Math.min(90, Math.floor((minY - 5) / 5) * 5);
+  maxY = Math.max(110, Math.ceil((maxY + 5) / 5) * 5);
+
+
+  const x = index => {
+
+    if(LIFE_DATA.length === 1){
+      return M.l + innerW / 2;
+    }
+
+    return M.l + (index / (LIFE_DATA.length - 1)) * innerW;
+
+  };
+
+
+  const y = value =>
+    M.t + (maxY - value) / (maxY - minY) * innerH;
+
+
+  function el(name,attrs={},text=""){
+
+    const node = document.createElementNS(NS,name);
+
+    Object.entries(attrs).forEach(([key,value]) => {
+      node.setAttribute(key,value);
+    });
+
+    if(text){
+      node.textContent = text;
+    }
+
+    return node;
+
+  }
+
+
+  /* horizontal grid */
+
+  for(let i=0;i<=5;i++){
+
+    const value = minY + (i/5)*(maxY-minY);
+    const yy = y(value);
+
+    svg.appendChild(
+      el("line",{
+        x1:M.l,
+        y1:yy,
+        x2:W-M.r,
+        y2:yy,
+        stroke:"#24342b",
+        "stroke-width":"1"
+      })
+    );
+
+    svg.appendChild(
+      el("text",{
+        x:M.l-8,
+        y:yy+3,
+        "text-anchor":"end",
+        fill:"#809087",
+        "font-size":"9"
+      },Math.round(value))
+    );
+
+  }
+
+
+  /* T0 reference */
+
+  const y100 = y(100);
+
+  svg.appendChild(
+    el("line",{
+      x1:M.l,
+      y1:y100,
+      x2:W-M.r,
+      y2:y100,
+      stroke:"#d8e0da",
+      "stroke-width":"1.2",
+      "stroke-dasharray":"5 5",
+      opacity:".55"
+    })
+  );
+
+
+  svg.appendChild(
+    el("text",{
+      x:W-M.r-2,
+      y:y100-5,
+      "text-anchor":"end",
+      fill:"#9ba9a0",
+      "font-size":"8"
+    },"T0 = 100")
+  );
+
+
+  /* vertical dates */
+
+  LIFE_DATA.forEach((row,index) => {
+
+    svg.appendChild(
+      el("line",{
+        x1:x(index),
+        y1:M.t,
+        x2:x(index),
+        y2:H-M.b,
+        stroke:"#17251d",
+        "stroke-width":"1"
+      })
+    );
+
+    svg.appendChild(
+      el("text",{
+        x:x(index),
+        y:H-15,
+        "text-anchor":"middle",
+        fill:"#8fa098",
+        "font-size":"9"
+      },row.date)
+    );
+
+  });
+
+
+  /* series */
+
+  SERIES.forEach(series => {
+
+    const points =
+      normalized
+        .map((row,index) => ({
+          index,
+          value:row[series.key]
+        }))
+        .filter(point => Number.isFinite(point.value));
+
+
+    if(points.length > 1){
+
+      const path =
+        points
+          .map((point,index) =>
+            (index===0 ? "M" : "L") +
+            " " +
+            x(point.index) +
+            " " +
+            y(point.value)
+          )
+          .join(" ");
+
+
+      svg.appendChild(
+        el("path",{
+          d:path,
+          fill:"none",
+          stroke:series.color,
+          "stroke-width":"2.4",
+          "stroke-linecap":"round",
+          "stroke-linejoin":"round"
+        })
+      );
+
+    }
+
+
+    points.forEach(point => {
+
+      svg.appendChild(
+        el("circle",{
+          cx:x(point.index),
+          cy:y(point.value),
+          r:"4",
+          fill:series.color,
+          stroke:"#07100c",
+          "stroke-width":"2"
+        })
+      );
+
+    });
+
+
+    const item = document.createElement("div");
+
+    item.className = "legend-item";
+
+    item.innerHTML =
+      '<span class="swatch" style="background:' +
+      series.color +
+      '"></span><span>' +
+      series.label +
+      '</span>';
+
+    legend.appendChild(item);
+
+  });
+
+
+  if(LIFE_DATA.length === 1){
+
+    svg.appendChild(
+      el("text",{
+        x:W/2,
+        y:M.t + innerH/2 + 36,
+        "text-anchor":"middle",
+        fill:"#8fa098",
+        "font-size":"10"
+      },
+      "T0 registrado · T1 iniciará la trayectoria longitudinal")
+    );
+
+  }
+
+})();
+
+</script>
 
 </body>
 </html>
