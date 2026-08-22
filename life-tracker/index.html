@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Life OS · Health Dashboard</title>
+
+<style>
+:root {
+  --bg: #08110d;
+  --panel: #101c16;
+  --panel-2: #14231b;
+  --border: #26362d;
+
+  --text: #f5f7f5;
+  --muted: #8fa095;
+
+  --green: #74d68a;
+  --green-dark: #183c24;
+  --yellow: #e8c769;
+  --red: #e87f73;
+  --blue: #84b7ff;
+
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #030705;
+  color: var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Segoe UI",
+    sans-serif;
+}
+
+/* =========================
+   16:9 DASHBOARD CANVAS
+========================= */
+
+.dashboard {
+  width: min(100vw, 177.78vh);
+  min-height: min(100vh, 56.25vw);
+  aspect-ratio: 16 / 9;
+
+  margin: auto;
+
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(80, 160, 100, .12),
+      transparent 38%
+    ),
+    var(--bg);
+
+  padding: 28px 34px;
+
+  display: grid;
+  grid-template-rows:
+    auto auto 1fr auto;
+
+  gap: 20px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.brand {
+  font-size: 14px;
+  letter-spacing: .14em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.date-block {
+  text-align: center;
+}
+
+.date {
+  font-size: clamp(26px, 2.4vw, 46px);
+  font-weight: 700;
+  letter-spacing: -.04em;
+}
+
+.phase {
+  margin-top: 4px;
+  color: var(--green);
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.status {
+  justify-self: end;
+
+  padding: 8px 13px;
+  border: 1px solid #31583c;
+  border-radius: 999px;
+
+  color: var(--green);
+  background: rgba(74, 130, 84, .08);
+
+  font-size: 13px;
+}
+
+/* =========================
+   STRATEGIC OBJECTIVE
+========================= */
+
+.objective {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 15px 20px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(60,110,70,.19),
+    rgba(15,28,21,.6)
+  );
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.objective-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+}
+
+.objective-value {
+  margin-top: 5px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.target {
+  text-align: right;
+}
+
+.target strong {
+  font-size: 22px;
+  color: var(--green);
+}
+
+/* =========================
+   MAIN GRID
+========================= */
+
+.main {
+  min-height: 0;
+
+  display: grid;
+  grid-template-columns: 1.05fr 1.35fr 1fr;
+  gap: 18px;
+}
+
+.panel {
+  background: rgba(16, 28, 22, .88);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  padding: 18px;
+
+  min-width: 0;
+}
+
+.panel-title {
+  margin-bottom: 14px;
+
+  font-size: 12px;
+  color: var(--muted);
+
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+/* =========================
+   KPI CARDS
+========================= */
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+}
+
+.kpi {
+  padding: 13px;
+
+  background: var(--panel-2);
+  border: 1px solid #24382c;
+  border-radius: 14px;
+}
+
+.kpi-label {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.kpi-value {
+  margin-top: 5px;
+
+  font-size: clamp(20px, 1.6vw, 30px);
+  font-weight: 700;
+
+  letter-spacing: -.04em;
+}
+
+.kpi-unit {
+  margin-left: 3px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.good { color: var(--green); }
+.warning { color: var(--yellow); }
+.bad { color: var(--red); }
+
+/* =========================
+   RISK STACK
+========================= */
+
+.risk-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 45px;
+  gap: 10px;
+  align-items: center;
+
+  margin-bottom: 12px;
+}
+
+.risk-label {
+  color: #d8ded9;
+  font-size: 12px;
+}
+
+.bar {
+  height: 8px;
+  overflow: hidden;
+
+  background: #26352d;
+  border-radius: 20px;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 20px;
+}
+
+.risk-value {
+  text-align: right;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.clinical {
+  margin-top: 18px;
+  padding: 14px;
+
+  background: #0c1711;
+  border-left: 3px solid var(--yellow);
+  border-radius: 9px;
+
+  color: #cbd4cd;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================
+   WEEKLY KPI TABLE
+========================= */
+
+.week-row {
+  display: grid;
+  grid-template-columns: 1.2fr .75fr .75fr 44px;
+  gap: 9px;
+
+  align-items: center;
+
+  padding: 9px 0;
+
+  border-bottom: 1px solid #203027;
+}
+
+.week-row.header {
+  padding-top: 0;
+
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.week-name {
+  font-size: 12px;
+}
+
+.week-value {
+  font-size: 12px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+
+  justify-self: center;
+
+  border-radius: 50%;
+  background: var(--yellow);
+}
+
+/* =========================
+   PROGRESS
+========================= */
+
+.progress-group {
+  margin-top: 17px;
+}
+
+.progress-title {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 6px;
+
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.progress-bar {
+  height: 9px;
+
+  overflow: hidden;
+
+  background: #24342b;
+  border-radius: 20px;
+}
+
+.progress-bar > div {
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      #39784a,
+      var(--green)
+    );
+
+  border-radius: 20px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+
+  align-items: center;
+
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.legend {
+  display: flex;
+  gap: 15px;
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mini-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 900px) {
+
+  .dashboard {
+    width: 100%;
+    min-height: auto;
+    aspect-ratio: auto;
+
+    padding: 20px;
+  }
+
+  header {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .brand,
+  .status {
+    justify-self: center;
+  }
+
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .objective {
+    display: block;
+  }
+
+  .target {
+    margin-top: 10px;
+    text-align: left;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="dashboard">
+
+  <!-- HEADER -->
+  <header>
+
+    <div class="brand">
+      Life OS · Health Performance
+    </div>
+
+    <div class="date-block">
+      <div class="date">
+        22 Agosto 2026
+      </div>
+
+      <div class="phase">
+        T0 · Baseline
+      </div>
+    </div>
+
+    <div class="status">
+      ● System Online
+    </div>
+
+  </header>
+
+
+  <!-- STRATEGIC OBJECTIVE -->
+  <section class="objective">
+
+    <div>
+      <div class="objective-title">
+        Strategic Objective
+      </div>
+
+      <div class="objective-value">
+        Reducir adiposidad visceral + construir fitness cardiorrespiratorio y fuerza
+      </div>
+    </div>
+
+    <div class="target">
+      Primer milestone<br>
+      <strong>95,9 kg</strong>
+      <span style="color:var(--muted)"> · −10%</span>
+    </div>
+
+  </section>
+
+
+  <!-- MAIN -->
+  <section class="main">
+
+
+    <!-- CURRENT STATE -->
+    <article class="panel">
+
+      <div class="panel-title">
+        01 · Current State
+      </div>
+
+      <div class="kpi-grid">
+
+        <div class="kpi">
+          <div class="kpi-label">Peso</div>
+          <div class="kpi-value bad">
+            106,5
+            <span class="kpi-unit">kg</span>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi-label">Cintura</div>
+          <div class="kpi-value bad">
+            127
+            <span class="kpi-unit">cm</span>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi-label">IMC</div>
+          <div class="kpi-value bad">
+            32,9
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi-label">PA basal</div>
+          <div class="kpi-value warning">
+            129/88
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi-label">FC reposo · 26 sem</div>
+          <div class="kpi-value good">
+            67
+            <span class="kpi-unit">lpm</span>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi-label">Pasos · 26 sem</div>
+          <div class="kpi-value">
+            7.105
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi-label">Sueño · 26 sem</div>
+          <div class="kpi-value bad">
+            6:37
+            <span class="kpi-unit">h</span>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi-label">Agua habitual</div>
+          <div class="kpi-value bad">
+            0,4
+            <span class="kpi-unit">L/d</span>
+          </div>
+        </div>
+
+      </div>
+
+    </article>
+
+
+    <!-- METABOLIC -->
+    <article class="panel">
+
+      <div class="panel-title">
+        02 · Metabolic & Clinical Risk
+      </div>
+
+
+      <div class="risk-row">
+        <div class="risk-label">Triglicéridos</div>
+
+        <div class="bar">
+          <div class="fill"
+               style="width:73%;background:var(--red)">
+          </div>
+        </div>
+
+        <div class="risk-value">
+          219
+        </div>
+      </div>
+
+
+      <div class="risk-row">
+        <div class="risk-label">HDL</div>
+
+        <div class="bar">
+          <div class="fill"
+               style="width:50%;background:var(--red)">
+          </div>
+        </div>
+
+        <div class="risk-value">
+          30
+        </div>
+      </div>
+
+
+      <div class="risk-row">
+        <div class="risk-label">LDL</div>
+
+        <div class="bar">
+          <div class="fill"
+               style="width:67%;background:var(--yellow)">
+          </div>
+        </div>
+
+        <div class="risk-value">
+          134
+        </div>
+      </div>
+
+
+      <div class="risk-row">
+        <div class="risk-label">ALT</div>
+
+        <div class="bar">
+          <div class="fill"
+               style="width:85%;background:var(--red)">
+          </div>
+        </div>
+
+        <div class="risk-value">
+          85
+        </div>
+      </div>
+
+
+      <div class="risk-row">
+        <div class="risk-label">HbA1c</div>
+
+        <div class="bar">
+          <div class="fill"
+               style="width:54%;background:var(--green)">
+          </div>
+        </div>
+
+        <div class="risk-value">
+          5,4%
+        </div>
+      </div>
+
+
+      <div class="risk-row">
+        <div class="risk-label">Glicemia</div>
+
+        <div class="bar">
+          <div class="fill"
+               style="width:45%;background:var(--green)">
+          </div>
+        </div>
+
+        <div class="risk-value">
+          90
+        </div>
+      </div>
+
+
+      <div class="clinical">
+
+        <strong style="color:white">
+          Executive Clinical Assessment
+        </strong>
+
+        <br><br>
+
+        Obesidad central con fenotipo metabólico desfavorable:
+        TG ↑ + HDL ↓ + adiposidad abdominal.
+
+        <br><br>
+
+        ALT elevada con patrón hepatocelular leve y ausencia de alcohol:
+        <strong>MASLD probable, aún no confirmada.</strong>
+
+        <br><br>
+
+        Glucemia, HbA1c, función renal, tiroidea y hematológica conservadas.
+
+      </div>
+
+    </article>
+
+
+    <!-- WEEK 1 -->
+    <article class="panel">
+
+      <div class="panel-title">
+        03 · Week 1 OKRs
+      </div>
+
+
+      <div class="week-row header">
+        <div>KPI</div>
+        <div>Baseline</div>
+        <div>Target</div>
+        <div></div>
+      </div>
+
+
+      <div class="week-row">
+        <div class="week-name">Entrenamientos</div>
+        <div class="week-value">0</div>
+        <div class="week-value">≥ 2</div>
+        <div class="dot"></div>
+      </div>
+
+
+      <div class="week-row">
+        <div class="week-name">Pasos / día</div>
+        <div class="week-value">7.105</div>
+        <div class="week-value">≥ 7.500</div>
+        <div class="dot"></div>
+      </div>
+
+
+      <div class="week-row">
+        <div class="week-name">Sueño</div>
+        <div class="week-value">6:37</div>
+        <div class="week-value">≥7h · 5/7</div>
+        <div class="dot"></div>
+      </div>
+
+
+      <div class="week-row">
+        <div class="week-name">Agua</div>
+        <div class="week-value">0,4 L</div>
+        <div class="week-value">≥1,5 L · 6/7</div>
+        <div class="dot"></div>
+      </div>
+
+
+      <div class="week-row">
+        <div class="week-name">Ultra-procesados</div>
+        <div class="week-value">—</div>
+        <div class="week-value">0 no planif.</div>
+        <div class="dot"></div>
+      </div>
+
+
+      <div class="week-row">
+        <div class="week-name">HBPM</div>
+        <div class="week-value">129/88</div>
+        <div class="week-value">7 días</div>
+        <div class="dot"></div>
+      </div>
+
+
+      <div class="week-row">
+        <div class="week-name">Watch</div>
+        <div class="week-value">Variable</div>
+        <div class="week-value">24/7</div>
+        <div class="dot"></div>
+      </div>
+
+
+      <!-- LONGITUDINAL TARGET -->
+
+      <div class="progress-group">
+
+        <div class="progress-title">
+          <span>Peso · Phase 1</span>
+          <span>106,5 → 95,9 kg</span>
+        </div>
+
+        <div class="progress-bar">
+          <div style="width:0%"></div>
+        </div>
+
+      </div>
+
+
+      <div class="progress-group">
+
+        <div class="progress-title">
+          <span>Cintura · Milestone 1</span>
+          <span>127 → &lt;120 cm</span>
+        </div>
+
+        <div class="progress-bar">
+          <div style="width:0%"></div>
+        </div>
+
+      </div>
+
+
+      <div class="progress-group">
+
+        <div class="progress-title">
+          <span>Sueño · Operational Target</span>
+          <span>6:37 → ≥7:15</span>
+        </div>
+
+        <div class="progress-bar">
+          <div style="width:0%"></div>
+        </div>
+
+      </div>
+
+    </article>
+
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+
+    <div>
+      Life OS · T0 baseline · Next review:
+      <strong style="color:#dfe7e1">
+        29 agosto 2026
+      </strong>
+    </div>
+
+    <div class="legend">
+
+      <span>
+        <span class="mini-dot"
+              style="background:var(--green)">
+        </span>
+        On target
+      </span>
+
+      <span>
+        <span class="mini-dot"
+              style="background:var(--yellow)">
+        </span>
+        Monitor
+      </span>
+
+      <span>
+        <span class="mini-dot"
+              style="background:var(--red)">
+        </span>
+        Priority
+      </span>
+
+    </div>
+
+  </footer>
+
+</main>
+
+</body>
+</html>
