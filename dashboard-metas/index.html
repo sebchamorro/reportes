@@ -256,12 +256,22 @@ html,body{
   font-weight:700;
   font-size:.9rem;
   line-height:1;
+  display:flex;
+  align-items:center;
+  gap:.22rem;
 }
 .cell .name{
   font-size:.6rem;
   line-height:1.15;
-  margin-top:.2rem;
+  margin-top:.18rem;
   opacity:.85;
+}
+.cell .frac{
+  font-family:var(--mono);
+  font-size:.56rem;
+  line-height:1.1;
+  margin-top:.12rem;
+  opacity:.7;
 }
 .cell.critico{background:var(--critico-bg);}
 .cell.critico .pct{color:var(--critico);}
@@ -271,6 +281,13 @@ html,body{
 .cell.meta .pct{color:var(--meta);}
 .cell.sobre{background:var(--sobre-bg);}
 .cell.sobre .pct{color:var(--sobre);}
+
+.arrow{font-size:.75em;line-height:1;}
+.arrow.up{color:#3B7A3F;}
+.arrow.down{color:#B0392C;}
+.arrow-mini{font-size:.85em;line-height:1;margin-left:.15em;}
+.arrow-mini.up{color:#3B7A3F;}
+.arrow-mini.down{color:#B0392C;}
 
 .cell.multi{
   display:grid;
@@ -437,7 +454,7 @@ html,body{
         <div class="sub">Trazadoras · IAAPS · Metas Sanitarias — Departamento de Salud Constitución</div>
       </div>
     </div>
-    <div class="meta" id="topMeta">Generado 18/08/2026</div>
+    <div class="meta" id="topMeta">Generado 29/08/2026</div>
   </div>
 
   <div class="tabnav" id="tabnav">
@@ -457,7 +474,7 @@ html,body{
       <span class="item"><span class="dot meta"></span><b>En meta</b>&nbsp;90–110%</span>
       <span class="item"><span class="dot sobre"></span><b>Sobre-cumplimiento</b>&nbsp;≥130%</span>
       <span class="spacer"></span>
-      <span class="hint">pasa el mouse sobre una celda para ver el detalle</span>
+      <span class="hint">▲ mejoró · ▼ empeoró vs. junio — pasa el mouse sobre una celda para ver el detalle</span>
     </div>
 
     <div class="board">
@@ -469,7 +486,7 @@ html,body{
     </div>
 
     <div class="footbar">
-      <span class="cortebox">Corte: producción acumulada ene–jun 2026 · verificado contra MPO</span>
+      <span class="cortebox">Corte: producción acumulada ene–jul 2026 · verificado contra MPO</span>
       <span>Formato de referencia: dashboard "Trazadoras" — Servicio de Salud Maule, Unidad Modelo y Gestión Territorial</span>
     </div>
 
@@ -546,38 +563,49 @@ document.getElementById('tabnav').addEventListener('click', (e)=>{
 });
 
 function pct(n){ return n.toFixed(2).replace(".",",") + "%"; }
+function miles(n){ return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+function arrowHtml(tendencia, mini){
+  if(tendencia !== "mejora" && tendencia !== "empeora") return "";
+  const cls = mini ? "arrow-mini" : "arrow";
+  const dir = tendencia === "mejora" ? "up" : "down";
+  const glyph = tendencia === "mejora" ? "▲" : "▼";
+  return `<span class="${cls} ${dir}">${glyph}</span>`;
+}
 
 /* =========================================================================
-   TAB 1 — TRAZADORAS
+   TAB 1 — TRAZADORAS  (comuna Constitución · corte producción acumulada ene–jul 2026)
+   Fuente: reporte de trazadoras a julio 2026. Tendencia (▲/▼) compara el
+   % de cumplimiento de julio contra el corte anterior (ene–jun 2026),
+   según se acerque o se aleje de la banda meta 90–110%.
    ========================================================================= */
 const DATA = [
-  {id:"1.1", trazadora:"Ctrl. desarrollo psicomotor 8 meses", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:83.51},
-  {id:"1.2", trazadora:"Ctrl. desarrollo psicomotor 3 años", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:87.97},
-  {id:"12", trazadora:"Ctrl. salud infantil <1 año", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:88.47},
-  {id:"21", trazadora:"Ctrl. salud infantil 6–9 años", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:49.58},
-  {id:"16", trazadora:"Consulta lactancia materna", grupo_etario:"Infancia", estamento:"Matronería", cumplimiento:89.42},
-  {id:"13", trazadora:"Crónicos respiratorios — IRA", grupo_etario:"Infancia", estamento:"Eq. Cardiovascular", cumplimiento:132.42},
-  {id:"14", trazadora:"Nutricional — malnutrición exceso", grupo_etario:"Infancia", estamento:"Nutrición", cumplimiento:29.90},
-  {id:"19", trazadora:"Nutricional 5° mes de vida", grupo_etario:"Infancia", estamento:"Nutrición", cumplimiento:116.22},
+  {id:"1.1", trazadora:"Ctrl. desarrollo psicomotor 8 meses", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:82.65, esperada:219, acumulada:181, tendencia:"empeora"},
+  {id:"1.2", trazadora:"Ctrl. desarrollo psicomotor 3 años", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:86.45, esperada:310, acumulada:268, tendencia:"empeora"},
+  {id:"12", trazadora:"Ctrl. salud infantil <1 año", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:89.95, esperada:617, acumulada:555, tendencia:"mejora"},
+  {id:"21", trazadora:"Ctrl. salud infantil 6–9 años", grupo_etario:"Infancia", estamento:"Enf./Matronería", cumplimiento:49.24, esperada:1511, acumulada:744, tendencia:"empeora"},
+  {id:"16", trazadora:"Consulta lactancia materna", grupo_etario:"Infancia", estamento:"Matronería", cumplimiento:88.45, esperada:606, acumulada:536, tendencia:"empeora"},
+  {id:"13", trazadora:"Crónicos respiratorios — IRA", grupo_etario:"Infancia", estamento:"Eq. Cardiovascular", cumplimiento:134.26, esperada:467, acumulada:627, tendencia:"empeora"},
+  {id:"14", trazadora:"Nutricional — malnutrición exceso", grupo_etario:"Infancia", estamento:"Nutrición", cumplimiento:29.39, esperada:2028, acumulada:596, tendencia:"empeora"},
+  {id:"19", trazadora:"Nutricional 5° mes de vida", grupo_etario:"Infancia", estamento:"Nutrición", cumplimiento:100.00, esperada:129, acumulada:129, tendencia:"mejora"},
 
-  {id:"2", trazadora:"Educación grupal adolescentes", grupo_etario:"Adolescencia", estamento:"Eq. Multidisciplinario", cumplimiento:24.29},
-  {id:"3", trazadora:"Ingreso fertilidad adolescente", grupo_etario:"Adolescencia", estamento:"Matronería", cumplimiento:112.25},
-  {id:"11", trazadora:"Consulta nutricional adolescente", grupo_etario:"Adolescencia", estamento:"Nutrición", cumplimiento:66.15},
+  {id:"2", trazadora:"Educación grupal adolescentes", grupo_etario:"Adolescencia", estamento:"Eq. Multidisciplinario", cumplimiento:20.73, esperada:82, acumulada:17, tendencia:"empeora"},
+  {id:"3", trazadora:"Ingreso fertilidad adolescente", grupo_etario:"Adolescencia", estamento:"Matronería", cumplimiento:112.24, esperada:237, acumulada:266, tendencia:"mejora"},
+  {id:"11", trazadora:"Consulta nutricional adolescente", grupo_etario:"Adolescencia", estamento:"Nutrición", cumplimiento:70.24, esperada:531, acumulada:373, tendencia:"mejora"},
 
-  {id:"4", trazadora:"Control de climaterio", grupo_etario:"Adulto", estamento:"Matronería", cumplimiento:77.06},
-  {id:"5.1", trazadora:"Ingresos crónicos 25–64 años", grupo_etario:"Adulto", estamento:"Eq. Cardiovascular", cumplimiento:78.15},
-  {id:"18", trazadora:"Controles integrales crónicos", grupo_etario:"Adulto", estamento:"Eq. Cardiovascular", cumplimiento:46.83},
-  {id:"20", trazadora:"Seguimientos ECICEP", grupo_etario:"Adulto", estamento:"Eq. Cardiovascular", cumplimiento:21.01},
+  {id:"4", trazadora:"Control de climaterio", grupo_etario:"Adulto", estamento:"Matronería", cumplimiento:88.94, esperada:651, acumulada:579, tendencia:"mejora"},
+  {id:"5.1", trazadora:"Ingresos crónicos 25–64 años", grupo_etario:"Adulto", estamento:"Eq. Cardiovascular", cumplimiento:99.12, esperada:1250, acumulada:1239, tendencia:"mejora"},
+  {id:"18", trazadora:"Controles integrales crónicos", grupo_etario:"Adulto", estamento:"Eq. Cardiovascular", cumplimiento:49.16, esperada:12603, acumulada:6196, tendencia:"mejora"},
+  {id:"20", trazadora:"Seguimientos ECICEP", grupo_etario:"Adulto", estamento:"Eq. Cardiovascular", cumplimiento:21.69, esperada:21019, acumulada:4559, tendencia:"mejora"},
 
-  {id:"5.2", trazadora:"Ingresos crónicos 65+ años", grupo_etario:"Adulto mayor", estamento:"Eq. Cardiovascular", cumplimiento:61.07},
-  {id:"7", trazadora:"Morbilidad odontológica AM", grupo_etario:"Adulto mayor", estamento:"Odontología", cumplimiento:82.83},
-  {id:"8", trazadora:"EMPAM seguimiento autovalente", grupo_etario:"Adulto mayor", estamento:"Enf./Matronería", cumplimiento:85.55},
+  {id:"5.2", trazadora:"Ingresos crónicos 65+ años", grupo_etario:"Adulto mayor", estamento:"Eq. Cardiovascular", cumplimiento:78.54, esperada:1333, acumulada:1047, tendencia:"mejora"},
+  {id:"7", trazadora:"Morbilidad odontológica AM", grupo_etario:"Adulto mayor", estamento:"Odontología", cumplimiento:81.77, esperada:1426, acumulada:1166, tendencia:"empeora"},
+  {id:"8", trazadora:"EMPAM seguimiento autovalente", grupo_etario:"Adulto mayor", estamento:"Enf./Matronería", cumplimiento:88.24, esperada:306, acumulada:270, tendencia:"mejora"},
 
-  {id:"6", trazadora:"Intervención psicosocial grupal", grupo_etario:"Transversal", estamento:"Psic./Salud mental", cumplimiento:547.17},
-  {id:"9", trazadora:"Consulta de morbilidad", grupo_etario:"Transversal", estamento:"Medicina", cumplimiento:129.25},
-  {id:"10", trazadora:"Crónicos respiratorios — ERA", grupo_etario:"Transversal", estamento:"Eq. Cardiovascular", cumplimiento:131.35},
-  {id:"15", trazadora:"Visita domiciliaria integral", grupo_etario:"Transversal", estamento:"Eq. Multidisciplinario", cumplimiento:139.67},
-  {id:"17", trazadora:"Salud mental (por médico)", grupo_etario:"Transversal", estamento:"Medicina", cumplimiento:134.91},
+  {id:"6", trazadora:"Intervención psicosocial grupal", grupo_etario:"Transversal", estamento:"Psic./Salud mental", cumplimiento:501.64, esperada:61, acumulada:306, tendencia:"mejora"},
+  {id:"9", trazadora:"Consulta de morbilidad", grupo_etario:"Transversal", estamento:"Medicina", cumplimiento:130.78, esperada:20841, acumulada:27255, tendencia:"empeora"},
+  {id:"10", trazadora:"Crónicos respiratorios — ERA", grupo_etario:"Transversal", estamento:"Eq. Cardiovascular", cumplimiento:127.44, esperada:882, acumulada:1124, tendencia:"mejora"},
+  {id:"15", trazadora:"Visita domiciliaria integral", grupo_etario:"Transversal", estamento:"Eq. Multidisciplinario", cumplimiento:137.04, esperada:1644, acumulada:2253, tendencia:"mejora"},
+  {id:"17", trazadora:"Salud mental (por médico)", grupo_etario:"Transversal", estamento:"Medicina", cumplimiento:134.50, esperada:2339, acumulada:3146, tendencia:"mejora"},
 ];
 
 const ROWS = ["Infancia","Adolescencia","Adulto","Adulto mayor","Transversal"];
@@ -632,16 +660,17 @@ ROWS.forEach(r => {
       const d = items[0];
       gridHtml += `
         <div class="gcell cell ${d.semaforo}">
-          <div class="pct">${pct(d.cumplimiento)}</div>
+          <div class="pct">${pct(d.cumplimiento)}${arrowHtml(d.tendencia,false)}</div>
           <div class="name">${d.id} · ${d.trazadora}</div>
-          <div class="tip"><b>${d.id} — ${d.trazadora}</b>${r} · ${d.estamento}<br>Cumplimiento: ${pct(d.cumplimiento)}</div>
+          <div class="frac">${miles(d.acumulada)} / ${miles(d.esperada)}</div>
+          <div class="tip"><b>${d.id} — ${d.trazadora}</b>${r} · ${d.estamento}<br>Cumplimiento: ${pct(d.cumplimiento)}<br>Producción acumulada / esperada a julio: ${miles(d.acumulada)} / ${miles(d.esperada)}<br>Tendencia vs. junio: ${d.tendencia === "mejora" ? "mejoró ▲" : "empeoró ▼"}</div>
         </div>`;
     } else {
-      const tipRows = items.map(d=>`${d.id} ${d.trazadora}: ${pct(d.cumplimiento)}`).join("<br>");
+      const tipRows = items.map(d=>`${d.id} ${d.trazadora}: ${pct(d.cumplimiento)} (${miles(d.acumulada)}/${miles(d.esperada)})`).join("<br>");
       const chips = items.map(d => `
         <div class="chip ${d.semaforo}" title="${d.id} — ${d.trazadora}">
           <div class="cid">${d.id}</div>
-          <div class="cpct">${pct(d.cumplimiento)}</div>
+          <div class="cpct">${pct(d.cumplimiento)}${arrowHtml(d.tendencia,true)}</div>
         </div>
       `).join("");
       const ncols = items.length === 4 ? 2 : Math.min(items.length, 3);
