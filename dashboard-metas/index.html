@@ -515,7 +515,7 @@ html,body{
 
     <div class="footbar">
       <span class="cortebox" id="iaapsCorte"></span>
-      <span>Planilla de Evaluación IAAPS 2026 — Primer corte final · fuente: Servicio de Salud Maule</span>
+      <span>Planilla de Evaluación IAAPS 2026 — Segundo corte (v2.0.2) · fuente: Servicio de Salud Maule</span>
     </div>
 
   </div>
@@ -685,12 +685,12 @@ ROWS.forEach(r => {
 grid.innerHTML = gridHtml;
 
 /* =========================================================================
-   TAB 2 — IAAPS  (comuna Constitución · Primer corte, al 31 de mayo de 2026)
-   Fuente: Planilla de Evaluacion IAAPS 2026 - Primer corte final.xlsx
+   TAB 2 — IAAPS  (comuna Constitución · Segundo corte, al 31 de julio de 2026)
+   Fuente: Planilla de Evaluacion IAAPS 2026 - Segundo corte (v2.0.2).xlsx corregido.xlsx
    Hoja "Calculo Indice", fila Constitución (código 7102)
    ========================================================================= */
-const IAAPS_INDICE = { indiceFinal: 100.04, indiceGES: 100.0 };
-const IAAPS_CORTE = "Primer corte — al 31 de mayo de 2026";
+const IAAPS_INDICE = { indiceFinal: 99.1, indiceGES: 100.0 };
+const IAAPS_CORTE = "Segundo corte — al 31 de julio de 2026";
 
 const IAAPS_METAS = [
   {id:"1",     nombre:"Autoevaluación MAIS (centros de salud)",                          cumplimiento:null},
@@ -704,18 +704,18 @@ const IAAPS_METAS = [
   {id:"6.2",   nombre:"Cobertura EMP — 65 años y más",                                   cumplimiento:100},
   {id:"7",     nombre:"Desarrollo psicomotor 12–23 meses",                               cumplimiento:100},
   {id:"8",     nombre:"Control de salud integral adolescente 10–19 años",                cumplimiento:100},
-  {id:"9.1",   nombre:"Atención integral en salud mental",                               cumplimiento:100},
+  {id:"9.1",   nombre:"Atención integral en salud mental",                               cumplimiento:93.5},
   {id:"9.2",   nombre:"Tasa de controles en salud mental",                               cumplimiento:100},
   {id:"9.3",   nombre:"Egresos por alta clínica",                                        cumplimiento:100},
   {id:"10",    nombre:"Garantías explícitas en salud (GES) — APS",                       cumplimiento:100},
-  {id:"11",    nombre:"Cobertura vacunación anti-influenza",                             cumplimiento:null},
+  {id:"11",    nombre:"Cobertura vacunación anti-influenza",                             cumplimiento:100},
   {id:"12",    nombre:"Ingreso precoz a control de embarazo",                            cumplimiento:100},
-  {id:"13",    nombre:"Cobertura de métodos anticonceptivos, adolescentes 15–19",        cumplimiento:null},
-  {id:"14",    nombre:"Cobertura Diabetes Mellitus 2 (15 y más años)",                   cumplimiento:null},
-  {id:"15",    nombre:"Cobertura Hipertensión Arterial (15 y más años)",                 cumplimiento:null},
+  {id:"13",    nombre:"Cobertura de métodos anticonceptivos, adolescentes 15–19",        cumplimiento:90},
+  {id:"14",    nombre:"Cobertura Diabetes Mellitus 2 (15 y más años)",                   cumplimiento:100},
+  {id:"15",    nombre:"Cobertura Hipertensión Arterial (15 y más años)",                 cumplimiento:96.9},
   {id:"16",    nombre:"Utilización de servicios de salud",                               cumplimiento:null},
   {id:"17",    nombre:"Niñas/os <3 años libres de caries",                               cumplimiento:100},
-  {id:"18",    nombre:"Normalidad nutricional en menores de 2 años",                     cumplimiento:null},
+  {id:"18",    nombre:"Normalidad nutricional en menores de 2 años",                     cumplimiento:100},
   {id:"19",    nombre:"Hospitalizaciones evitables (condiciones APS)",                   cumplimiento:null},
 ];
 
